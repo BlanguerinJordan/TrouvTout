@@ -1,0 +1,35 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter&display=swap");
+
+/*========== VARIABLES GLOBALES ==========*/
+:root {
+  --Inter-font: "Inter", sans-serif;
+}
+
+/*========== BASE ==========*/
+* {
+  font-family: var(--Inter-font);
+}
+
+
+/*========== HEADER ==========*/
+
+
+/*========== MAIN ==========*/
+
+
+/*========== MEDIA QUERIES ==========*/
+
+/* Tablette Portait */
+@media (min-width: 800px) {
+  
+/*====== HEADER ======*/
+
+/*====== MAIN ======*/
+ 
+}
+
+/* Tablette Paysage et Desktop */
+@media (min-width: 1024px) {
+  
+  /*========== MAIN ==========*/
+}
