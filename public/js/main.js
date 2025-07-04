@@ -47,6 +47,13 @@ async function fetchAllAds() {
       const location = document.createElement("p");
       location.textContent = `Lieu : ${ad.location}`;
       wrapper.appendChild(location);
+      const username = document.createElement("p");
+      username.textContent = `Pseudo : ${ad.users.username}`;
+      wrapper.appendChild(username);
+
+      const firstname = document.createElement("p");
+      firstname.textContent = `Prénom : ${ad.users.firstname}`;
+      wrapper.appendChild(firstname);
 
       adsList.appendChild(wrapper);
     });

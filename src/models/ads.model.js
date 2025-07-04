@@ -39,7 +39,7 @@ export async function createAdModel({
 }
 
 export async function getUserAdsWithImage(user_id, token) {
-    const supabaseToken = await supabaseClient.getSupabaseWithToken(token);
+  const supabaseToken = await supabaseClient.getSupabaseWithToken(token);
   const { data, error } = await supabaseToken
     .from("Ads")
     .select(
@@ -52,9 +52,7 @@ export async function getUserAdsWithImage(user_id, token) {
       Images:Images!Images_ad_id_fkey(url)
     `
     )
-    .eq("user_id", user_id)
-
-    console.log(data[0].Images.url)
+    .eq("user_id", user_id);
 
   if (error) throw new Error("Erreur lors de la récupération des annonces");
 
@@ -71,27 +69,19 @@ export async function getUserAdsWithImage(user_id, token) {
 
 export async function getAllAdsWithImage() {
   const { data, error } = await supabaseClient.supabase
-    .from("Ads")
-    .select(`
-      id,
-      title,
-      description,
-      price,
-      location,
-      Images:Images!Images_ad_id_fkey (
-        url
-      )
-    `)
+    .from("public_ads")
+    .select("*")
     .order("id", { ascending: false });
 
   if (error) throw new Error("Erreur lors de la récupération des annonces");
-
-  return data.map(ad => ({
+  
+  return data.map((ad) => ({
     id: ad.id,
     title: ad.title,
     description: ad.description,
     price: ad.price,
     location: ad.location,
-    image_url: Array.isArray(ad.Images) && ad.Images.length > 0 ? ad.Images[0].url : null
+    users: { username: ad.username, firstname: ad.firstname },
+    image_url: ad.main_image_url|| null,
   }));
 }
