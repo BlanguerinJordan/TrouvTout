@@ -1,9 +1,25 @@
-document.addEventListener("DOMContentLoaded", fetchAllAds);
+import { startInactivityLogout } from "./auth.js";
+import checkSession from "./session.js";
+let session = null;
+let currentuser = null;
+let email = "";
+document.addEventListener("DOMContentLoaded", async () => {
+  const sessionData = await checkSession();
+
+  if (sessionData.session === true) {
+    startInactivityLogout(10);
+  }
+  session = sessionData.session;
+  email = sessionData.email || "";
+  currentuser = sessionData.currentuser || null;
+
+  await fetchAllAds();
+});
 
 async function fetchAllAds() {
   try {
     const res = await fetch("/api/ads/all", {
-      method: "GET"
+      method: "GET",
     });
     const adsList = document.querySelector("#ads_list");
     adsList.textContent = "";
@@ -19,7 +35,7 @@ async function fetchAllAds() {
       return;
     }
 
-    ads.forEach(ad => {
+    ads.forEach((ad) => {
       const wrapper = document.createElement("div");
       wrapper.className = "ad";
 

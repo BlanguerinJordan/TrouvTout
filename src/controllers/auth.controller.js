@@ -74,17 +74,15 @@ async function confirmSignUpFinalizeHandler(req, res, next) {
       birthday_date,
       email
     );
-
-    req.session.iduser = user.id;
-    req.session.email = user.email;
-    req.session.email = username;
+    req.session.iduser = user.iduser;
+    req.session.email = email;
+    req.session.username = username;
     req.session.accessToken = accessToken;
     await req.session.save();
-
     return res.status(200).json({
       message: "Compte créé avec succès !",
-      user: { iduser: user.id, email, username },
-      sessions: { iduser: user.id, email, username },
+      user: { iduser: user.iduser, email, username },
+      sessions: { iduser: user.iduser, email, username },
     });
   } catch (err) {
     next(err);
@@ -107,8 +105,8 @@ async function loginHandler(req, res, next) {
       email,
       password
     );
-    req.session.email = profile.email;
     req.session.iduser = user.id;
+    req.session.email = profile.email;
     req.session.username = profile.username;
     req.session.accessToken = accessToken;
 

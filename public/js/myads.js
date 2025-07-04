@@ -1,4 +1,17 @@
+import { startInactivityLogout } from "./auth.js";
+import checkSession from "./session.js";
+let session = null;
+let currentuser = null;
+let email = "";
 document.addEventListener("DOMContentLoaded", fetchMyAds);
+const sessionData = await checkSession();
+
+if (sessionData.session === true) {
+  startInactivityLogout(10);
+}
+session = sessionData.session;
+email = sessionData.email || "";
+currentuser = sessionData.currentuser || null;
 
 async function fetchMyAds() {
   try {

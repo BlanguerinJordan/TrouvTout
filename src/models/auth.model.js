@@ -44,16 +44,16 @@ async function insertUserDataWithSession(
   birthday_date,
   email
 ) {
-  const supabaseToken = await supabaseClient.getSupabaseWithActiveSession(
-    accessToken,
-    refreshToken
-  );
+  const supabaseToken =
+    await supabaseClient.getSupabaseWithActiveSessionRefresh(
+      accessToken,
+      refreshToken
+    );
 
   const {
     data: { user },
     error: userError,
   } = await supabaseToken.auth.getUser();
-  console.log(user);
 
   if (userError || !user) {
     throw new CustomError("Utilisateur introuvable", 404);
@@ -106,7 +106,7 @@ async function insertUserDataWithSession(
   }
 
   return {
-    user: { iduser: user.id, email },
+    iduser: user.id
   };
 }
 
@@ -228,10 +228,11 @@ async function confirmEmailOtpHandler(token_hash, type) {
 }
 
 async function updatePasswordHandler(accessToken, refreshToken, password) {
-  const supabaseWithSession = await supabaseClient.getSupabaseWithActiveSessionRefresh(
-    accessToken,
-    refreshToken
-  );
+  const supabaseWithSession =
+    await supabaseClient.getSupabaseWithActiveSessionRefresh(
+      accessToken,
+      refreshToken
+    );
 
   const { error: updateError } = await supabaseWithSession.auth.updateUser({
     password: password,
