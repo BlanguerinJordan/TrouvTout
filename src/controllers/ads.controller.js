@@ -1,5 +1,6 @@
 import * as ads from "../models/ads.model.js";
 import * as images from "../models/images.model.js";
+import { CustomError } from "../utils/CustomError.util.js";
 
 export async function getCategories(req, res) {
   try {

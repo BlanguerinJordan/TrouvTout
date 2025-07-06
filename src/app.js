@@ -7,8 +7,9 @@ import "./cron/cleanupPendingUsers.cron.js";
 import htmlRoutes from "./middlewares/htmlRoutes.middleware.js";
 import authRouter from "./routes/auth.routes.js";
 import adsRouter from "./routes/ads.routes.js";
+import profilsRouter from "./routes/profils.routes.js";
 import errorHandlerCustom from "./middlewares/errorHandler.middleware.js";
-import protectPage from './middlewares/protectPages.middleware.js';
+import protectPage from "./middlewares/protectPages.middleware.js";
 import applySession from "./lib/session.lib.js";
 dotenv.config();
 
@@ -29,13 +30,16 @@ app.get("/", (req, res) => {
   res.sendFile("index.html", { root: "public" });
 });
 
-app.get("/TrouvTout/:page",protectPage, htmlRoutes);
+app.get("/TrouvTout/:page", protectPage, htmlRoutes);
 
 //API Route for Authentification
 app.use("/api", authRouter);
 
 //API Route for Ads
 app.use("/api", adsRouter);
+
+//API Route for profils
+app.use("/api", profilsRouter);
 
 app.use(errorHandlerCustom);
 

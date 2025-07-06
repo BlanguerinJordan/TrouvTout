@@ -17,4 +17,82 @@ document.addEventListener("DOMContentLoaded", async () => {
   document
     .querySelector("#disconnect")
     ?.addEventListener("click", handlerLogout);
+
+  const profilForm = document.querySelector("#profil_form");
+  const emailForm = document.querySelector("#email_form");
+  const passwordForm = document.querySelector("#password_form");
+
+  const username = profilForm.querySelector("#username");
+  const lastname = profilForm.querySelector("#lastname");
+  const firstname = profilForm.querySelector("#firstname");
+  const birthdayDate = profilForm.querySelector("#birthday_date");
+  const phoneNumber = profilForm.querySelector("#phone_number");
+  const location = profilForm.querySelector("#location");
+
+  const emailInput = emailForm.querySelector("#email");
+  // const emailConfirmInput = emailForm.querySelector("#email_confirm");
+
+  // const passwordInput = passwordForm.querySelector("#password");
+  // const passwordInputConfirm = passwordForm.querySelector("#password_confirm");
+
+  await getProfilInfo();
+
+  async function getProfilInfo() {
+    try {
+      const res = await fetch("/api/profils/me", {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (!res.ok) {
+        throw new Error("Erreur lors du fetch des informations du profil");
+      }
+      const user = await res.json();
+      if (!user) {
+        throw new Error("Erreur lors de la récupération des infos côté front");
+      }
+
+      username.placeholder = user.data.username;
+      lastname.placeholder = user.data.lastname || "non défini";
+      firstname.placeholder = user.data.firstname || "non défini";
+      birthdayDate.value = user.data.birthday_date;
+      phoneNumber.placeholder = user.data.number_phone || "non défini";
+      location.placeholder = user.data.location || "non défini";
+      emailInput.placeholder = user.data.email;
+    } catch (err) {
+      console.error(err.message);
+    }
+  }
+
+  profilForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch("/api/profils/addInfos", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          userInfos: {
+            username: username?.value,
+            lastname: lastname?.value,
+            firstname: firstname?.value,
+            birthdayDate: birthdayDate?.value,
+            phoneNumber: phoneNumber?.value,
+            location: location?.value,
+          },
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Erreur lors de la modif côté front");
+      }
+
+      const result = await res.json();
+      window.location.reload();
+
+      console.log(result.message);
+    } catch (err) {
+      console.log(err.message);
+    }
+  });
 });

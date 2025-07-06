@@ -1,60 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TrouvTout</title>
 </head>
-<body>
-     <h1>Mon Profil</h1>
-     <a href="/TrouvTout/"><button>Retour à l'Accueil</button></a>
-     <button id="disconnect">Se Deconnecter</button>
 
-    <form action="/update-profile" method="POST">
+<body>
+    <h1>Mon Profil</h1>
+    <a href="/TrouvTout/"><button>Retour à l'Accueil</button></a>
+    <button id="disconnect">Se Deconnecter</button>
+
+    <form id="profil_form" method="POST">
         <!-- Informations de profil -->
         <div>
             <label for="username">Nom d'utilisateur :</label>
-            <input type="text" id="username" name="username" placeholder="ex: john_doe" required>
+            <input type="text" id="username" name="username" placeholder="" >
         </div>
 
         <div>
             <label for="lastname">Nom :</label>
-            <input type="text" id="lastname" name="lastname" placeholder="ex: Dupont" required>
+            <input type="text" id="lastname" name="lastname" placeholder="" >
         </div>
 
         <div>
             <label for="firstname">Prénom :</label>
-            <input type="text" id="firstname" name="firstname" placeholder="ex: Jean" required>
+            <input type="text" id="firstname" name="firstname" placeholder="" >
         </div>
 
         <div>
             <label for="birthday_date">Date de naissance :</label>
-            <input type="date" id="birthday_date" name="birthday_date" required>
+            <input type="date" id="birthday_date" name="birthday_date" >
         </div>
 
         <div>
+            <label for="phone_number">Numéro de téléphone :</label>
+            <input type="tel" id="phone_number" name="phone_number" placeholder="" >
+        </div>
+
+        <div>
+            <label for="location">Localisation :</label>
+            <input type="text" id="location" name="location" placeholder="" >
+        </div>
+        <div>
+            <button type="submit">Modifier les informations</button>
+        </div>
+    </form>
+    <!--Changement de l'email-->
+    <h2>Modifier l'email</h2>
+    <form id="email_form" method="POST">
+        <div>
             <label for="email">Email :</label>
-            <input type="email" id="email" name="email" placeholder="ex: jean.dupont@email.com" required>
+            <input type="email" id="email" name="email" placeholder="" required>
         </div>
 
         <div>
             <label for="email_confirm">Confirmer l'email :</label>
             <input type="email" id="email_confirm" name="email_confirm" required>
         </div>
-
         <div>
-            <label for="phone_number">Numéro de téléphone :</label>
-            <input type="tel" id="phone_number" name="phone_number" placeholder="ex: 06 12 34 56 78" required>
+            <button type="submit">Changer l'email</button>
         </div>
+    </form>
 
-        <div>
-            <label for="location">Localisation :</label>
-            <input type="text" id="location" name="location" placeholder="ex: Paris, France" required>
-        </div>
+    <!-- Changement de mot de passe -->
+    <h2>Modifier le mot de passe</h2>
 
-        <!-- Changement de mot de passe -->
-        <h2>Modifier le mot de passe</h2>
-
+    <form id="password_form" method="POST">
         <div>
             <label for="current_password">Mot de passe actuel :</label>
             <input type="password" id="current_password" name="current_password" required>
@@ -71,10 +84,11 @@
         </div>
 
         <div>
-            <button type="submit">Enregistrer les modifications</button>
+            <button type="submit">Changer le mot de passe</button>
         </div>
     </form>
 
     <script type="module" src="/TrouvTout/js/profil.js"></script>
 </body>
+
 </html>

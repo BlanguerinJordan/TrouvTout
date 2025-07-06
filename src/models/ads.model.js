@@ -34,6 +34,7 @@ export async function createAdModel({
     console.error("Erreur model création annonce :", error.message);
     throw new Error("Erreur création annonce");
   }
+  console.log(data);
 
   return data;
 }
