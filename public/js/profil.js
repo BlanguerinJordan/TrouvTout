@@ -66,21 +66,19 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   profilForm.addEventListener("submit", async (e) => {
     e.preventDefault();
+    const userInfos = {};
+    if (username?.value) userInfos.username = username.value;
+    if (lastname?.value) userInfos.lastname = lastname.value;
+    if (firstname?.value) userInfos.firstname = firstname.value;
+    if (birthdayDate?.value) userInfos.birthdayDate = birthdayDate.value;
+    if (phoneNumber?.value) userInfos.phoneNumber = phoneNumber.value;
+    if (location?.value) userInfos.location = location.value;
     try {
       const res = await fetch("/api/profils/addInfos", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify({
-          userInfos: {
-            username: username?.value,
-            lastname: lastname?.value,
-            firstname: firstname?.value,
-            birthdayDate: birthdayDate?.value,
-            phoneNumber: phoneNumber?.value,
-            location: location?.value,
-          },
-        }),
+        body: JSON.stringify({userInfos}),
       });
 
       if (!res.ok) {

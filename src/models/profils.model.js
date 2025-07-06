@@ -16,20 +16,28 @@ export async function getUserOwnInfos(token) {
   return { data };
 }
 
-export async function setUsersInformation(userInfos, token,iduser) {
+export async function setUsersInformation(userInfos, token, iduser) {
   const supabaseToken = await getSupabaseWithToken(token);
+
+  const updateObj = {};
+  if ("username" in userInfos) updateObj.username = userInfos.username;
+  if ("lastname" in userInfos) updateObj.lastname = userInfos.lastname;
+  if ("firstname" in userInfos) updateObj.firstname = userInfos.firstname;
+  if ("birthdayDate" in userInfos)
+    updateObj.birthday_date = userInfos.birthdayDate;
+  if ("phoneNumber" in userInfos)
+    updateObj.number_phone = userInfos.phoneNumber;
+  if ("location" in userInfos) updateObj.location = userInfos.location;
+
+  // Si aucun champ à updater, on renvoie une erreur
+  if (Object.keys(updateObj).length === 0) {
+    throw new Error("Aucune donnée à mettre à jour");
+  }
 
   const { error } = await supabaseToken
     .from("Users")
-    .update({
-      username: userInfos.username,
-      lastname: userInfos.lastname,
-      firstname: userInfos.firstname,
-      birthday_date: userInfos.birthdayDate,
-      number_phone: userInfos.phoneNumber,
-      location: userInfos.location,
-    })
-    .eq("id", iduser) // ou le champ qui contient l'id du user
+    .update(updateObj)
+    .eq("id", iduser)
     .single();
 
   if (error) {
