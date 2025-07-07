@@ -1,4 +1,4 @@
-const protectedPages = ["createads", "profil", "modifyads"];
+const protectedPages = ["createads", "profil", "myads", "modifyads"];
 const bypassPages = ["login"];
 
 export default function protectPage(req, res, next) {

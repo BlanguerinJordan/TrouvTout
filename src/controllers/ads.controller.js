@@ -30,11 +30,6 @@ export async function createAd(req, res) {
 
     if (!file) return res.status(400).json({ error: "Image requise." });
 
-    // Vérification session
-    if (!req.session?.iduser || !req.session?.accessToken) {
-      return res.status(401).json({ error: "Non connecté" });
-    }
-
     // Création de l'annonce
     const newAd = await ads.createAdModel({
       title,
@@ -73,9 +68,6 @@ export async function myAds(req, res, next) {
   try {
     if (req.method !== "GET") {
       throw new Error("Méthode non autorisée", 405);
-    }
-    if (!req.session || !req.session.iduser) {
-      return res.status(401).json({ error: "Non authentifié" });
     }
     // On suppose ici que tu veux la première image pour chaque annonce :
     const adsList = await ads.getUserAdsWithImage(req.session.iduser, req.session.accessToken);

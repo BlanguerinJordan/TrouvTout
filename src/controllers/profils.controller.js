@@ -6,14 +6,10 @@ export async function getProfilInformation(req, res, next) {
     if (req.method !== "GET") {
       throw new CustomError("Méthode non autorisée", 405);
     }
-    if (!req.session?.iduser || !req.session?.accessToken) {
-      return res.status(401).json({ error: "Non connecté" });
-    }
 
     const { data: user, error: userError } = await profils.getUserOwnInfos(
-      req.session.accessToken
+      req.session.accessToken,req.session.iduser
     );
-
     if (userError) {
       throw new CustomError(
         "Erreur lors de la récupération dans le controller",
@@ -32,17 +28,21 @@ export async function setProfilInformation(req, res, next) {
     if (req.method !== "PUT") {
       throw new CustomError("Méthode non autorisée", 405);
     }
-    if (!req.session?.iduser || !req.session?.accessToken) {
-      return res.status(401).json({ error: "Non connecté" });
-    }
 
     const { userInfos } = req.body;
 
     if (!userInfos) {
       throw new CustomError("Données manquantes", 400);
     }
-    const { message, error: insertError } =
-      await profils.setUsersInformation(userInfos, req.session.accessToken,req.session.iduser);
+    const {
+      message,
+      changeConfirmed,
+      error: insertError,
+    } = await profils.setUsersInformation(
+      userInfos,
+      req.session.accessToken,
+      req.session.iduser
+    );
     if (insertError) {
       throw new CustomError(
         "Erreur lors de l'insertion dans le controller",
@@ -50,7 +50,9 @@ export async function setProfilInformation(req, res, next) {
       );
     }
 
-    return res.status(200).json({ message: message });
+    return res
+      .status(200)
+      .json({ message: message, changeConfirmed: changeConfirmed });
   } catch (err) {
     next(err);
   }

@@ -164,9 +164,6 @@ async function logoutHandler(req, res, next) {
 
 async function deleteUserHandler(req, res, next) {
   try {
-    if (!req.session.iduser) {
-      throw new CustomError("Non connecté", 401);
-    }
 
     const result = await auth.softDeleteUserHandler(req.session.iduser);
 

@@ -148,21 +148,26 @@ async function loginUserHandler(email, password) {
 }
 
 async function softDeleteUserHandler(userId) {
-  const { error: deleteError } = await supabaseAdmin
+  const { error: deleteError } = await supabaseClient.supabaseAdmin
     .from("Users")
     .update({ is_deleted: true, delete_at: new Date().toISOString() })
-    .eq("id", userId);
+    .eq("id", userId)
+    .select();
 
   if (deleteError) {
     console.error("Erreur soft delete :", deleteError.message);
     throw new CustomError("Erreur lors de la suppression soft", 500);
   }
 
-  const { error: logError } = await supabaseAdmin.from("cron_logs").insert({
-    user_id: userId,
-    status: "pending",
-    message: "Suppression en attente",
-  });
+  const { error: logError } = await supabaseClient.supabaseAdmin
+    .from("Cron_logs")
+    .insert({
+      user_id: userId,
+      cron_name: "purge_users",
+      status: "pending",
+      message: "Suppression en attente",
+    })
+    .select();
 
   if (logError) {
     console.error("❌ Erreur création log :", logError.message);

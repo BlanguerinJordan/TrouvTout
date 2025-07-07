@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify({userInfos}),
+        body: JSON.stringify({ userInfos }),
       });
 
       if (!res.ok) {
@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
 
       const result = await res.json();
-      window.location.reload();
+      if (result.changeConfirmed === true) window.location.reload();
 
       console.log(result.message);
     } catch (err) {
