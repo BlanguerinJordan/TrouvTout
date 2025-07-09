@@ -1,5 +1,5 @@
 import { CustomError } from "../utils/CustomError.util.js";
-import * as auth from "../models/auth.model.js";
+import {auth} from "../models/index.js";
 
 async function signupHandler(req, res, next) {
   try {
@@ -132,7 +132,7 @@ async function loginHandler(req, res, next) {
 
 async function meHandler(req, res, next) {
   try {
-    if (req.session.email && req.session.iduser) {
+    if (req.session?.email && req.session?.username && req.session?.iduser) {
       return res.status(200).json({
         user: {
           email: req.session.email,
@@ -142,7 +142,7 @@ async function meHandler(req, res, next) {
       });
     }
 
-    throw new CustomError("Non connecté", 401);
+    throw new CustomError("Session Invalide", 500);
   } catch (err) {
     next(err);
   }
@@ -164,7 +164,6 @@ async function logoutHandler(req, res, next) {
 
 async function deleteUserHandler(req, res, next) {
   try {
-
     const result = await auth.softDeleteUserHandler(req.session.iduser);
 
     return res.status(200).json({ message: result.message });

@@ -1,8 +1,8 @@
-import { supabaseAdmin } from "../lib/supabaseClient.lib.js";
+import {supabaseClient} from "../lib/index.js";
 
 export async function getCronStatus(userId) {
   try {
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabaseClient.supabaseAdmin
       .from("cron_logs")
       .select("*")
       .eq("user_id", userId)

@@ -1,5 +1,4 @@
-import * as redis from '../lib/redisClient.lib.js';
-import { supabaseAdmin } from "../lib/supabaseClient.lib.js";
+import {redis, supabaseClient } from "../lib/index.js";
 
 const purgeQueue = new redis.Queue('purgeUsers', { connection: redis.redisConnection });
 
@@ -13,7 +12,7 @@ new redis.Worker('purgeUsers', async job => {
   console.log('⏰ Job purgeUsers lancé');
 
   try {
-    const { data: users, error } = await supabaseAdmin
+    const { data: users, error } = await supabaseClient.supabaseAdmin
       .from('Users')
       .select('id, delete_at')
       .eq('is_deleted', true);
@@ -33,10 +32,10 @@ new redis.Worker('purgeUsers', async job => {
         console.log(`🧹 Suppression de ${user.id}`);
 
         try {
-          await supabaseAdmin.auth.admin.deleteUser(user.id);
-          await supabaseAdmin.from('users').delete().eq('id', user.id);
+          await supabaseClient.supabaseAdmin.auth.admin.deleteUser(user.id);
+          await supabaseClient.supabaseAdmin.from('users').delete().eq('id', user.id);
 
-          await supabaseAdmin.from('Cron_logs').insert({
+          await supabaseClient.supabaseAdmin.from('Cron_logs').insert({
             cron_name: 'purge_users',
             user_id: user.id,
             status: 'success',
@@ -45,7 +44,7 @@ new redis.Worker('purgeUsers', async job => {
         } catch (err) {
           console.error(`❌ Erreur suppression user ${user.id} :`, err);
 
-          await supabaseAdmin.from('Cron_logs').insert({
+          await supabaseClient.supabaseAdmin.from('Cron_logs').insert({
             cron_name: 'purge_users',
             user_id: user.id,
             status: 'error',

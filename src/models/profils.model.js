@@ -1,8 +1,8 @@
-import { getSupabaseWithToken } from "../lib/supabaseClient.lib.js";
+import { supabaseClient } from "../lib/index.js";
 import { CustomError } from "../utils/CustomError.util.js";
 
 export async function getUserOwnInfos(token,iduser) {
-  const supabaseToken = await getSupabaseWithToken(token);
+  const supabaseToken = await supabaseClient.getSupabaseWithToken(token);
 
   const { data, error } = await supabaseToken
     .from("Users")
@@ -18,7 +18,7 @@ export async function getUserOwnInfos(token,iduser) {
 }
 
 export async function setUsersInformation(userInfos, token, iduser) {
-  const supabaseToken = await getSupabaseWithToken(token);
+  const supabaseToken = await supabaseClient.getSupabaseWithToken(token);
   const { data: emailchange, error: changeError } = await supabaseToken
     .from("Users")
     .select("birthday_date")

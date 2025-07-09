@@ -1,5 +1,4 @@
-import * as redis from '../lib/redisClient.lib.js';
-import { supabaseAdmin } from "../lib/supabaseClient.lib.js";
+import {redis, supabaseClient} from "../lib/index.js"
 
 const cleanupQueue = new redis.Queue('purgeUsers', { connection: redis.redisConnection });
 
@@ -14,7 +13,7 @@ new redis.Worker('cleanupPendingUsers', async job => {
   console.log('🔔 Job cleanupPendingUsers lancé');
 
   try {
-    const { data, error } = await supabaseAdmin.auth.admin.listUsers();
+    const { data, error } = await supabaseClient.supabaseAdmin.auth.admin.listUsers();
 
     if (error) {
       console.error('❌ Erreur récupération utilisateurs :', error.message);
@@ -39,9 +38,9 @@ new redis.Worker('cleanupPendingUsers', async job => {
 
     for (const user of expiredUsers) {
       try {
-        await supabaseAdmin.auth.admin.deleteUser(user.id);
+        await supabaseClient.supabaseAdmin.auth.admin.deleteUser(user.id);
 
-        await supabaseAdmin.from('cron_logs').insert({
+        await supabaseClient.supabaseAdmin.from('cron_logs').insert({
           cron_name: 'cleanup_pending_users',
           user_id: user.id,
           status: 'success',
@@ -52,7 +51,7 @@ new redis.Worker('cleanupPendingUsers', async job => {
       } catch (deleteError) {
         console.error(`❌ Erreur suppression utilisateur ${user.email} :`, deleteError.message);
 
-        await supabaseAdmin.from('cron_logs').insert({
+        await supabaseClient.supabaseAdmin.from('cron_logs').insert({
           cron_name: 'cleanup_pending_users',
           user_id: user.id,
           status: 'error',

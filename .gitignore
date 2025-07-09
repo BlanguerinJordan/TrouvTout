@@ -1,4 +1,2 @@
 .env
 node_modules/
-
-public/js/old_index.js

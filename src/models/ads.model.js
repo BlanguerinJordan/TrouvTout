@@ -1,9 +1,9 @@
-import * as supabaseClient from "../lib/supabaseClient.lib.js";
+import {supabaseClient} from "../lib/index.js";
 
 export async function getCategoriesModel() {
   const { data, error } = await supabaseClient.supabase
     .from("Categories")
-    .select("id, name");
+    .select("*");
 
   if (error) {
     console.error("Erreur dans le model :", error.message);

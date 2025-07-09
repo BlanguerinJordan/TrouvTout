@@ -1,7 +1,7 @@
-import { getSupabaseWithToken } from '../lib/supabaseClient.lib.js';
+import {supabaseClient} from '../lib/index.js';
 
 export async function uploadImage({ file, ad_id, token }) {
-  const supabase = getSupabaseWithToken(token);
+  const supabase = supabaseClient.getSupabaseWithToken(token);
   const { data: sessionUser, error: userError } = await supabase.auth.getUser();
   console.log('User ID via supabase.auth.getUser():', sessionUser?.user?.id, 'Error:', userError);
 
@@ -27,7 +27,7 @@ export async function uploadImage({ file, ad_id, token }) {
 
 export async function insertImageRecord({ ad_id, url, token }) {
     
-  const supabase = await getSupabaseWithToken(token);
+  const supabase = await supabaseClient.getSupabaseWithToken(token);
   const { error } = await supabase
     .from('Images')
     .insert([{ ad_id, url, uploaded_at: new Date().toISOString() }]);

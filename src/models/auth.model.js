@@ -1,4 +1,4 @@
-import * as supabaseClient from "../lib/supabaseClient.lib.js";
+import {supabaseClient} from "../lib/index.js";
 import { CustomError } from "../utils/CustomError.util.js";
 
 async function signupUserHandler(email, password) {

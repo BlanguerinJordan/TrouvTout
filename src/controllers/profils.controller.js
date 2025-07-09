@@ -1,4 +1,4 @@
-import * as profils from "../models/profils.model.js";
+import {profils} from "../models/index.js";
 import { CustomError } from "../utils/CustomError.util.js";
 
 export async function getProfilInformation(req, res, next) {

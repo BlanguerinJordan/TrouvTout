@@ -1,18 +1,18 @@
 import express from "express";
-import * as auth from "../controllers/auth.controller.js";
-import verifySessionJWT from "../middlewares/verifySupabaseJWT.middleware.js"
+import {auth} from "../controllers/index.js";
+import {verifySessionJWT} from "../middlewares/index.js"
 
 const router = express.Router();
 
 router.get("/me", verifySessionJWT,auth.meHandler);
-router.post("/auth/signup",auth.signupHandler);
-router.get("/auth/confirmsignup",auth.confirmSignUpHandler);
-router.post("/auth/finalizesignup", auth.confirmSignUpFinalizeHandler);
-router.post("/auth/login",auth.loginHandler);
-router.post("/auth/logout", auth.logoutHandler);
-router.post("/auth/forgetpassword", auth.forgotPasswordHandler);
-router.post("/auth/newpassword", auth.newPasswordHandler);
-router.get("/auth/confirm", auth.confirmRecoveryHandler);
-router.delete("/auth/deleteuser",verifySessionJWT, auth.deleteUserHandler);
+router.post("/signup",auth.signupHandler);
+router.get("/confirmsignup",auth.confirmSignUpHandler);
+router.post("/finalizesignup", auth.confirmSignUpFinalizeHandler);
+router.post("/login",auth.loginHandler);
+router.post("/logout", auth.logoutHandler);
+router.post("/forgetpassword", auth.forgotPasswordHandler);
+router.post("/newpassword", auth.newPasswordHandler);
+router.get("/confirm", auth.confirmRecoveryHandler);
+router.delete("/deleteuser",verifySessionJWT, auth.deleteUserHandler);
 
 export default router;
