@@ -202,7 +202,7 @@ async function deleteUserAuthHandler(userId: string) {
 async function sendEmailResetPasswordHandler(email: string) {
   const { error: sendEmailError } = await
     supabaseClient.supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: "http://172.29.157.133/TrouvTout/forgetpassword",
+      redirectTo: "https://trouvtout-34a4b4p5s-blanguerinjordan60-2837s-projects.vercel.app/forgetpassword",
     });
 
   if (sendEmailError) {

@@ -104,7 +104,7 @@ async function signinfront(email, password) {
     }
     const data = await res.json();
     console.log(data);
-    window.location.href = "/TrouvTout/profil";
+    window.location.href = "/profil";
   } catch (err) {
     console.log("Erreur côté front:", err);
   }
@@ -178,7 +178,7 @@ function startInactivityLogout(delayInMinutes) {
       method: "POST",
       credentials: "include",
     }).finally(() => {
-      window.location.href = "/TrouvTout/timeout";
+      window.location.href = "/timeout";
     });
   };
 

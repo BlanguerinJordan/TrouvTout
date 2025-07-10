@@ -81,16 +81,20 @@ document.addEventListener("DOMContentLoaded", async () => {
         body: JSON.stringify({ userInfos }),
       });
 
-      if (!res.ok) {
-        throw new Error("Erreur lors de la modif côté front");
-      }
-
       const result = await res.json();
+
+      if (!res.ok) {
+        throw new Error(result.error);
+      }
       if (result.changeConfirmed === true) window.location.reload();
 
       console.log(result.message);
     } catch (err) {
       console.log(err.message);
     }
+  });
+
+  emailForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
   });
 });
