@@ -11,6 +11,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       e.preventDefault();
      const data = await handleNewPassword()
      if(data ===true)
-        window.location.href = "http://172.29.157.133/TrouvTout/confirmResetPassword";
+        window.location.href = "/confirmResetPassword";
     });
 });

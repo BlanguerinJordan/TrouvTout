@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         console.log("✅ Compte confirmé :", result);
         localStorage.removeItem("signupInfos");
         setTimeout(() => {
-          window.location.href = "/TrouvTout/profil";
+          window.location.href = "/profil";
         }, 250); // Redirection après succès
       } else {
         console.warn("❌ Erreur confirmation :", result.error);

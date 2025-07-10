@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         console.log(message);
         console.log("Annonce créée :", ad);
         console.log("Image URL :", imageUrl);
-        window.location.href = "/TrouvTout/myads";
+        window.location.href = "/myads";
       } catch (error) {
         console.error("Erreur lors de la création :", error.message);
         console.log("Erreur : ", error.message);
