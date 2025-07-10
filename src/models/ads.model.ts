@@ -1,4 +1,4 @@
-import {supabaseClient} from "../lib/index.js";
+import { supabaseClient } from "../lib/index.js";
 
 export async function getCategoriesModel() {
   const { data, error } = await supabaseClient.supabase
@@ -21,6 +21,14 @@ export async function createAdModel({
   category_id,
   user_id,
   token,
+}: {
+  title: string;
+  description: string;
+  price: string;
+  location: string;
+  category_id: string;
+  user_id: string;
+  token: string;
 }) {
   const supabaseToken = await supabaseClient.getSupabaseWithToken(token);
 
@@ -39,7 +47,7 @@ export async function createAdModel({
   return data;
 }
 
-export async function getUserAdsWithImage(user_id, token) {
+export async function getUserAdsWithImage(user_id:string, token:string) {
   const supabaseToken = await supabaseClient.getSupabaseWithToken(token);
   const { data, error } = await supabaseToken
     .from("Ads")
@@ -75,7 +83,7 @@ export async function getAllAdsWithImage() {
     .order("id", { ascending: false });
 
   if (error) throw new Error("Erreur lors de la récupération des annonces");
-  
+
   return data.map((ad) => ({
     id: ad.id,
     title: ad.title,
@@ -83,6 +91,6 @@ export async function getAllAdsWithImage() {
     price: ad.price,
     location: ad.location,
     users: { username: ad.username, firstname: ad.firstname },
-    image_url: ad.main_image_url|| null,
+    image_url: ad.main_image_url || null,
   }));
 }

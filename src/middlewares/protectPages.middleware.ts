@@ -1,7 +1,8 @@
+import {Request,Response,NextFunction} from "express";
 const protectedPages = ["createads", "profil", "myads", "modifyads"];
 const bypassPages = ["login"];
 
-export default function protectPage(req, res, next) {
+export default function protectPage(req:Request, res:Response, next:NextFunction) {
   const page = req.params.page;
   const isAuthenticated =
     req.session && (req.session.email || req.session.iduser);

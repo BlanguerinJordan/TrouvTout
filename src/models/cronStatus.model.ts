@@ -1,6 +1,6 @@
 import {supabaseClient} from "../lib/index.js";
 
-export async function getCronStatus(userId) {
+export async function getCronStatus(userId:string) {
   try {
     const { data, error } = await supabaseClient.supabaseAdmin
       .from("cron_logs")

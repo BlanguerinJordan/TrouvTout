@@ -1,14 +1,9 @@
 export default async function checkSession() {
   try {
-    const res = await fetch("/api/me", {
+    const res = await fetch("/api/auth/me", {
       method: "GET",
       credentials: "include",
     });
-
-    if (res.status === 401) {
-      console.log("ℹ️ Utilisateur non connecté (401)");
-      return { session: false };
-    }
 
     if (!res.ok) {
       const { error } = await res.json();

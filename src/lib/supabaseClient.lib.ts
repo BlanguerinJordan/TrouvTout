@@ -2,21 +2,20 @@ import { createClient } from "@supabase/supabase-js";
 import dotenv from "dotenv";
 
 dotenv.config();
-
 const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_KEY
+  process.env.SUPABASE_URL as string,
+  process.env.SUPABASE_KEY as string
 );
 
 const supabaseAdmin = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
+  process.env.SUPABASE_URL as string,
+  process.env.SUPABASE_SERVICE_ROLE_KEY as string
 );
 
-function getSupabaseWithToken(token) {
+function getSupabaseWithToken(token:string) {
   const supabase = createClient(
-    process.env.SUPABASE_URL,
-    process.env.SUPABASE_KEY, // anon key
+    process.env.SUPABASE_URL as string,
+    process.env.SUPABASE_KEY as string, // anon key
     {
       global: {
         headers: {
@@ -29,10 +28,10 @@ function getSupabaseWithToken(token) {
   return supabase;
 }
 
-async function getSupabaseWithActiveSessionRefresh(token, refresh_token) {
+async function getSupabaseWithActiveSessionRefresh(token:string, refresh_token:string) {
   const supabase = createClient(
-    process.env.SUPABASE_URL,
-    process.env.SUPABASE_KEY
+    process.env.SUPABASE_URL as string,
+    process.env.SUPABASE_KEY as string
   );
 
   await supabase.auth.setSession({

@@ -2,6 +2,7 @@
   "dependencies": {
     "@pm2/io": "^6.1.0",
     "@supabase/supabase-js": "^2.50.0",
+    "@types/jsonwebtoken": "^9.0.10",
     "bullmq": "^5.56.0",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
@@ -15,8 +16,9 @@
   "description": "Events gestion app",
   "main": "./src/app.js",
   "scripts": {
-    "start": "node ./src/app.js",
-    "firstdev": "pm2 start ./src/app.js --watch",
+    "build":"tsc", 
+    "start": "node ./dist/app.js",
+    "firstdev": "pm2 start ./dist/app.js --watch",
     "dev": "pm2 start 1 --watch",
     "logs": "pm2 log ",
     "version:patch": "npm version patch && git push && git push --tags",
@@ -37,5 +39,17 @@
     "url": "https://github.com/BlanguerinJordan/EventMate/issues"
   },
   "homepage": "https://github.com/BlanguerinJordan/EventMate#readme",
-  "type": "module"
+  "type": "module",
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/multer": "^2.0.0",
+    "@types/node": "^24.0.12",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  },
+  "overrides": {
+    "@types/express": "^5.0.3",
+    "@types/express-serve-static-core": "^5.0.3",
+    "@types/express-session": "^1.17.10"
+  }
 }

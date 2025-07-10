@@ -1,4 +1,4 @@
-import express from "express";
+import express,{RequestHandler} from "express";
 import path from "path";
 import { fileURLToPath } from "url";
 import dotenv from "dotenv";
@@ -10,7 +10,7 @@ import {
   protectPages,
 } from "./middlewares/index.js";
 import router from "./routes/index.js";
-import applySession from "./lib/session.lib.js";
+import {applySession} from "./lib/index.js";
 dotenv.config();
 
 const app = express();
@@ -21,7 +21,7 @@ app.use(applySession);
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const BASE_PATH = process.env.BASE_PATH;
+const BASE_PATH = process.env.BASE_PATH ?? "";
 const PORT = process.env.PORT_SERVER;
 
 app.use(BASE_PATH, express.static(path.join(__dirname, "../public")));
@@ -32,7 +32,7 @@ app.get("/", (req, res) => {
 
 app.get("/TrouvTout/:page", protectPages, htmlRoutes);
 
-//API Route
+// API Route
 app.use("/api", router);
 
 app.use(errorHandlerCustom);

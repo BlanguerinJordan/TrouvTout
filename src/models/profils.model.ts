@@ -1,15 +1,16 @@
+import { stringify } from "querystring";
 import { supabaseClient } from "../lib/index.js";
 import { CustomError } from "../utils/CustomError.util.js";
 
-export async function getUserOwnInfos(token,iduser) {
+export async function getUserOwnInfos(token: string, iduser: string) {
   const supabaseToken = await supabaseClient.getSupabaseWithToken(token);
 
   const { data, error } = await supabaseToken
     .from("Users")
     .select("*")
-    .eq("id",iduser)
+    .eq("id", iduser)
     .single();
-    
+
   if (error) {
     throw new CustomError("Erreur model récupération info user", 500);
   }
@@ -17,7 +18,11 @@ export async function getUserOwnInfos(token,iduser) {
   return { data };
 }
 
-export async function setUsersInformation(userInfos, token, iduser) {
+export async function setUsersInformation(
+  userInfos: Record<string, string>,
+  token: string,
+  iduser: string
+) {
   const supabaseToken = await supabaseClient.getSupabaseWithToken(token);
   const { data: emailchange, error: changeError } = await supabaseToken
     .from("Users")
@@ -32,14 +37,18 @@ export async function setUsersInformation(userInfos, token, iduser) {
     );
 
   let changeConfirmed = false;
-  const updateObj = {};
+  const updateObj: Record<string, string> = {};
   if ("username" in userInfos) updateObj.username = userInfos.username;
   if ("lastname" in userInfos) updateObj.lastname = userInfos.lastname;
   if ("firstname" in userInfos) updateObj.firstname = userInfos.firstname;
-  if ("birthdayDate" in userInfos) {
-    if (emailchange.birthday_date !== userInfos.birthdayDate)
-      updateObj.birthday_date = userInfos.birthdayDate;
+
+  if (
+    "birthdayDate" in userInfos &&
+    emailchange.birthday_date !== userInfos.birthdayDate
+  ) {
+    updateObj.birthday_date = userInfos.birthdayDate;
   }
+
   if ("phoneNumber" in userInfos)
     updateObj.number_phone = userInfos.phoneNumber;
   if ("location" in userInfos) updateObj.location = userInfos.location;

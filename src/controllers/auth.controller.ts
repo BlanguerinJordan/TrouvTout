@@ -1,7 +1,8 @@
+import {Request,Response,NextFunction} from "express"
 import { CustomError } from "../utils/CustomError.util.js";
 import {auth} from "../models/index.js";
 
-async function signupHandler(req, res, next) {
+async function signupHandler(req:Request, res:Response, next:NextFunction) {
   try {
     if (req.method !== "POST") {
       throw new CustomError("Méthode non autorisée", 405);
@@ -24,7 +25,7 @@ async function signupHandler(req, res, next) {
   }
 }
 
-async function confirmSignUpHandler(req, res, next) {
+async function confirmSignUpHandler(req:Request, res:Response, next:NextFunction) {
   try {
     if (req.method !== "GET") {
       throw new CustomError("Méthode non autorisée", 405);
@@ -37,7 +38,7 @@ async function confirmSignUpHandler(req, res, next) {
     }
 
     const { accessToken, refreshToken } = await auth.verifyUserTokenSignUp(
-      token_hash
+      token_hash as string
     );
 
     return res.redirect(
@@ -49,7 +50,7 @@ async function confirmSignUpHandler(req, res, next) {
   }
 }
 
-async function confirmSignUpFinalizeHandler(req, res, next) {
+async function confirmSignUpFinalizeHandler(req:Request, res:Response, next:NextFunction) {
   try {
     if (req.method !== "POST")
       throw new CustomError("Méthode non autorisée", 405);
@@ -89,7 +90,7 @@ async function confirmSignUpFinalizeHandler(req, res, next) {
   }
 }
 
-async function loginHandler(req, res, next) {
+async function loginHandler(req:Request, res:Response, next:NextFunction) {
   try {
     if (req.method !== "POST") {
       throw new CustomError("Méthode non autorisée", 405);
@@ -130,7 +131,7 @@ async function loginHandler(req, res, next) {
   }
 }
 
-async function meHandler(req, res, next) {
+async function meHandler(req:Request, res:Response, next:NextFunction) {
   try {
     if (req.session?.email && req.session?.username && req.session?.iduser) {
       return res.status(200).json({
@@ -148,7 +149,7 @@ async function meHandler(req, res, next) {
   }
 }
 
-async function logoutHandler(req, res, next) {
+async function logoutHandler(req:Request, res:Response, next:NextFunction) {
   try {
     if (req.method !== "POST") {
       throw new CustomError("Méthode non autorisée", 405);
@@ -162,9 +163,9 @@ async function logoutHandler(req, res, next) {
   }
 }
 
-async function deleteUserHandler(req, res, next) {
+async function deleteUserHandler(req:Request, res:Response, next:NextFunction) {
   try {
-    const result = await auth.softDeleteUserHandler(req.session.iduser);
+    const result = await auth.softDeleteUserHandler(req.session.iduser as string);
 
     return res.status(200).json({ message: result.message });
   } catch (err) {
@@ -172,7 +173,7 @@ async function deleteUserHandler(req, res, next) {
   }
 }
 
-async function forgotPasswordHandler(req, res, next) {
+async function forgotPasswordHandler(req:Request, res:Response, next:NextFunction) {
   try {
     if (req.method !== "POST") {
       throw new CustomError("Méthode non autorisée", 405);
@@ -193,7 +194,7 @@ async function forgotPasswordHandler(req, res, next) {
   }
 }
 
-async function confirmRecoveryHandler(req, res) {
+async function confirmRecoveryHandler(req:Request, res:Response) {
   try {
     if (req.method !== "GET") {
       throw new CustomError("Méthode non autorisée", 405);
@@ -207,7 +208,7 @@ async function confirmRecoveryHandler(req, res) {
 
     console.log("🔑 Token reçu pour vérification :", token_hash);
 
-    const session = await auth.confirmEmailOtpHandler(token_hash, type);
+    const session = await auth.confirmEmailOtpHandler(token_hash as string, type as string);
 
     console.log("✅ Email vérifié avec succès.");
 
@@ -216,22 +217,23 @@ async function confirmRecoveryHandler(req, res) {
       `${redirectUrl}?access_token=${session.access_token}&refresh_token=${session.refresh_token}`
     );
   } catch (err) {
+    const errMsg = err instanceof Error? err.message:String(err);
     if (err instanceof CustomError) {
-      console.warn(`❌ Erreur personnalisée : ${err.message}`);
+      console.warn(`❌ Erreur personnalisée : ${errMsg}`);
     } else {
-      console.error("❌ Erreur inconnue :", err.message);
+      console.error("❌ Erreur inconnue :", errMsg);
     }
 
     return res.redirect(
       302,
       `/TrouvTout/forgetpassword?errormessage=${encodeURIComponent(
-        err.message
+        errMsg
       )}`
     );
   }
 }
 
-async function newPasswordHandler(req, res, next) {
+async function newPasswordHandler(req:Request, res:Response, next:NextFunction) {
   try {
     if (req.method !== "POST") {
       throw new CustomError("Méthode non autorisée", 405);

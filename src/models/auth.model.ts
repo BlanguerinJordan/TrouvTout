@@ -1,7 +1,7 @@
-import {supabaseClient} from "../lib/index.js";
+import { supabaseClient } from "../lib/index.js";
 import { CustomError } from "../utils/CustomError.util.js";
 
-async function signupUserHandler(email, password) {
+async function signupUserHandler(email: string, password: string) {
   const { data: authData, error: authError } =
     await supabaseClient.supabase.auth.signUp({
       email,
@@ -38,11 +38,11 @@ async function signupUserHandler(email, password) {
 }
 
 async function insertUserDataWithSession(
-  accessToken,
-  refreshToken,
-  username,
-  birthday_date,
-  email
+  accessToken: string,
+  refreshToken: string,
+  username: string,
+  birthday_date: string,
+  email: string
 ) {
   const supabaseToken =
     await supabaseClient.getSupabaseWithActiveSessionRefresh(
@@ -96,7 +96,11 @@ async function insertUserDataWithSession(
       await deleteUserAuthHandler(user.id);
       console.log("🗑️ Utilisateur Auth supprimé après échec insertion.");
     } catch (cleanupError) {
-      console.error("Erreur suppression Auth :", cleanupError?.message);
+      const cleanErrMsg =
+        cleanupError instanceof Error
+          ? cleanupError.message
+          : String(cleanupError);
+      console.error("Erreur suppression Auth :", cleanErrMsg);
     }
 
     throw new CustomError(
@@ -106,11 +110,11 @@ async function insertUserDataWithSession(
   }
 
   return {
-    iduser: user.id
+    iduser: user.id,
   };
 }
 
-async function loginUserHandler(email, password) {
+async function loginUserHandler(email: string, password: string) {
   const { data: authData, error: authError } =
     await supabaseClient.supabase.auth.signInWithPassword({ email, password });
 
@@ -147,7 +151,7 @@ async function loginUserHandler(email, password) {
   return { user, profile: userProfile, accessToken: access_token };
 }
 
-async function softDeleteUserHandler(userId) {
+async function softDeleteUserHandler(userId: string) {
   const { error: deleteError } = await supabaseClient.supabaseAdmin
     .from("Users")
     .update({ is_deleted: true, delete_at: new Date().toISOString() })
@@ -180,7 +184,7 @@ async function softDeleteUserHandler(userId) {
   return { message: "Utilisateur marqué comme supprimé et log créé" };
 }
 
-async function deleteUserAuthHandler(userId) {
+async function deleteUserAuthHandler(userId: string) {
   const { error: deleteError } =
     await supabaseClient.supabaseAdmin.auth.admin.deleteUser(userId);
 
@@ -195,8 +199,8 @@ async function deleteUserAuthHandler(userId) {
   return { message: "Utilisateur Supabase Auth supprimé avec succès" };
 }
 
-async function sendEmailResetPasswordHandler(email) {
-  const { error: sendEmailError } =
+async function sendEmailResetPasswordHandler(email: string) {
+  const { error: sendEmailError } = await
     supabaseClient.supabase.auth.resetPasswordForEmail(email, {
       redirectTo: "http://172.29.157.133/TrouvTout/forgetpassword",
     });
@@ -211,15 +215,18 @@ async function sendEmailResetPasswordHandler(email) {
   };
 }
 
-async function confirmEmailOtpHandler(token_hash, type) {
+async function confirmEmailOtpHandler(token_hash: string, type: string) {
   const { data: sessionData, error: verifyError } =
     await supabaseClient.supabase.auth.verifyOtp({
-      type,
+      type:type as "recovery",
       token_hash,
     });
 
   if (verifyError || !sessionData?.session?.access_token) {
-    console.error("❌ Erreur verifyOtp Supabase :", verifyError.message);
+    const verifyErrMsg =
+      verifyError instanceof Error ? verifyError.message : String(verifyError);
+
+    console.error("❌ Erreur verifyOtp Supabase :", verifyErrMsg);
     throw new CustomError("Token invalide ou expiré", 401);
   }
 
@@ -232,7 +239,11 @@ async function confirmEmailOtpHandler(token_hash, type) {
   return sessionData.session;
 }
 
-async function updatePasswordHandler(accessToken, refreshToken, password) {
+async function updatePasswordHandler(
+  accessToken: string,
+  refreshToken: string,
+  password: string
+) {
   const supabaseWithSession =
     await supabaseClient.getSupabaseWithActiveSessionRefresh(
       accessToken,
@@ -251,7 +262,7 @@ async function updatePasswordHandler(accessToken, refreshToken, password) {
   return { message: "Mot de passe mis à jour" };
 }
 
-async function verifyUserTokenSignUp(token_hash) {
+async function verifyUserTokenSignUp(token_hash: string) {
   const { data, error } = await supabaseClient.supabase.auth.verifyOtp({
     type: "signup",
     token_hash,
@@ -264,8 +275,8 @@ async function verifyUserTokenSignUp(token_hash) {
 
   return {
     user: data.user,
-    accessToken: data.session.access_token,
-    refreshToken: data.session.refresh_token,
+    accessToken: data.session?.access_token,
+    refreshToken: data.session?.refresh_token,
   };
 }
 
