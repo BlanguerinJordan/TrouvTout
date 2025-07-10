@@ -10,10 +10,10 @@ export default function protectPage(req:Request, res:Response, next:NextFunction
   if (protectedPages.includes(page)) {
     if (!isAuthenticated) {
       console.log(
-        `⛔ Accès interdit à la page ${page} sans session. Redirection vers /TrouvTout/login`
+        `⛔ Accès interdit à la page ${page} sans session. Redirection vers /login`
       );
-      if (currentPath !== "/TrouvTout/login") {
-        return res.redirect("/TrouvTout/login");
+      if (currentPath !== "/login") {
+        return res.redirect("/login");
       } else {
         return next();
       }
@@ -22,10 +22,10 @@ export default function protectPage(req:Request, res:Response, next:NextFunction
   if (bypassPages.includes(page)) {
     if (isAuthenticated) {
       console.log(
-        `✅ Utilisateur déjà connecté. Redirection depuis la page ${page} vers /TrouvTout/profil`
+        `✅ Utilisateur déjà connecté. Redirection depuis la page ${page} vers /profil`
       );
-      if (currentPath !== "/TrouvTout/profil" && page !== "profil") {
-        return res.redirect("/TrouvTout/profil");
+      if (currentPath !== "/profil" && page !== "profil") {
+        return res.redirect("/profil");
       } else {
         return next();
       }
